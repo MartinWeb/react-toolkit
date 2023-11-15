@@ -1,6 +1,7 @@
 name: Sonar Analysis
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * SAT'
 
@@ -8,17 +9,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 20.x
           cache: 'npm'
       - run: npm ci
       - run: npm run build
       - run: npm test -- --coverage
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1.5
+        uses: sonarsource/sonarcloud-github-action@master
         with:
           args: >
             -Dsonar.organization=axaguildev
